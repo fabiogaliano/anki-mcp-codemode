@@ -4,7 +4,11 @@ An MCP server for AI-powered Anki interaction using a **codemode architecture** 
 
 ## Why Codemode?
 
-Traditional MCP servers expose dozens of individual tools. This server takes a different approach:
+This server implements the [codemode pattern](https://blog.cloudflare.com/code-mode/) pioneered by Cloudflare: instead of exposing dozens of discrete MCP tools, we provide a TypeScript API that the AI writes code against.
+
+> "LLMs are better at writing code to call APIs than at calling tools directly"
+
+LLMs have been trained on billions of lines of real code, but relatively few synthetic tool-calling examples. Writing `await anki.notes.add({...})` is natural — it's just TypeScript.
 
 | Traditional | Codemode |
 |-------------|----------|
@@ -13,7 +17,10 @@ Traditional MCP servers expose dozens of individual tools. This server takes a d
 | One operation per call | Compose multiple operations |
 | Tool explosion as features grow | API grows, tools stay stable |
 
-The AI writes code like `await anki.notes.add({...})` instead of invoking `addNote` with rigid parameters. This enables natural batching, error handling, and complex workflows in a single tool call.
+**Benefits:**
+- **Composable** — Chain operations without round-trips through the LLM
+- **Efficient** — Results flow through code, not back through the model for each step
+- **Familiar** — Standard patterns the AI already knows from training data
 
 ## Tools Overview
 
@@ -26,7 +33,8 @@ The AI writes code like `await anki.notes.add({...})` instead of invoking `addNo
 
 ## Prerequisites
 
-- [Anki](https://apps.ankiweb.net) with [AnkiConnect](https://ankiweb.net/shared/info/2055492159) plugin
+- [Anki](https://apps.ankiweb.net) desktop app **(must be running)**
+- [AnkiConnect](https://ankiweb.net/shared/info/2055492159) plugin installed in Anki
 - [Bun](https://bun.sh) runtime
 
 ## Installation
